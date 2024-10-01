@@ -17,13 +17,13 @@ app.get('/', (req, res) => {
     });
     pool.getConnection()
         .then(conn => {
-            res.send('Well done you have dockerized your first application')
+            res.send('Well done you have dockerized your first application!')
         })
         .catch(err => {
-            res.send('Error connecting to database. If you need additional help you can reach out to us at Slack.')
+            res.send('Error connecting to database. If you need additional help you can reach out to us on Google Spaces.')
         });
 })
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
+    console.log(`Example app listening on localhost:${port}`)
 })
