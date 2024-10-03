@@ -1,0 +1,40 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    container_name: docker-test-app
+    volumes:
+      - ./app-data:/app/data  # Mounting a volume for app data
+    healthcheck:
+      test: ["CMD", "curl", "http://localhost:3000"]  # Change the endpoint as needed
+      interval: 30s  # Check every 30 seconds
+      timeout: 10s   # Timeout after 10 seconds
+      retries: 3     # Retry 3 times before marking as unhealthy
+      start_period: 30s
+
+  db:
+    image: mariadb:11
+    restart: always
+    container_name: docker-mariadb
+    env_file:
+      - ./.env
+    ports:
+      - '3306:3306'
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+        test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+        start_period: 10s
+        interval: 10s
+        timeout: 5s
+        retries: 3
+
+volumes:
+  db-data:  # Define a named volume for the database
